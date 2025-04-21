@@ -1,0 +1,57 @@
+name: Replace Sigma Placeholders and Create PR
+
+on:
+  push:
+    branches: [dev]
+  workflow_dispatch:
+
+jobs:
+  replace_and_pr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout dev branch
+        uses: actions/checkout@v3
+        with:
+          ref: dev
+          fetch-depth: 0
+
+      - name: Set up Git identity
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+
+      - name: Create new branch from dev
+        id: vars
+        run: |
+          BRANCH_NAME="sigma-field-replace-$(date +%Y%m%d-%H%M%S)"
+          git checkout -b "$BRANCH_NAME"
+          echo "branch_name=$BRANCH_NAME" >> "$GITHUB_OUTPUT"
+
+      - name: Replace patterns using patterns.sed
+        run: |
+          for file in $(find playbook/dev/sigma -type f -name '*.yaml'); do
+            sed -i -f patterns.sed "$file"
+          done
+
+      - name: Commit and push if changes found
+        run: |
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git add .
+            git commit -m "Replace Sigma placeholders using ECS mappings"
+            git push origin "${{ steps.vars.outputs.branch_name }}"
+          else
+            echo "No changes to commit."
+            exit 0
+          fi
+
+      - name: Create Pull Request to dev-stable
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: "Replace Sigma placeholders with ECS fields"
+          body: |
+            This pull request updates Sigma rules by replacing legacy placeholders with ECS-compatible fields,
+            based on the definitions in the `patterns.sed` file.
+          head: ${{ steps.vars.outputs.branch_name }}
+          base: dev-stable
