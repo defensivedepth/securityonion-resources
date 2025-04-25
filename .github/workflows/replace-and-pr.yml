@@ -1,4 +1,4 @@
-name: Replace Sigma Placeholders and Create PR
+name: Replace Sigma Placeholders
 
 on:
   push:
@@ -15,21 +15,20 @@ jobs:
         with:
           ref: dev
           fetch-depth: 0
-          
-      - name: Fetch dev-stable
-        run: git fetch origin dev-stable:dev-stable
 
       - name: Set up Git identity
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@users.noreply.github.com"
 
-      - name: Create new branch from dev
-        id: vars
+      - name: Create or checkout playbook-stable branch
         run: |
-          BRANCH_NAME="sigma-field-replace-$(date +%Y%m%d-%H%M%S)"
-          git checkout -b "$BRANCH_NAME"
-          echo "branch_name=$BRANCH_NAME" >> "$GITHUB_OUTPUT"
+          if git show-ref --verify --quiet refs/heads/playbook-stable; then
+            git checkout playbook-stable
+            git merge dev
+          else
+            git checkout -b playbook-stable
+          fi
 
       - name: Replace patterns using patterns.sed
         run: |
@@ -42,7 +41,7 @@ jobs:
           if [[ -n "$(git status --porcelain)" ]]; then
             git add .
             git commit -m "Replace Sigma placeholders using ECS mappings"
-            git push origin "${{ steps.vars.outputs.branch_name }}"
+            git push origin playbook-stable
           else
             echo "No changes to commit."
             exit 0
