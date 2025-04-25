@@ -1,4 +1,4 @@
-name: History File Deletion
+name: History File Deletions
 id: 6F64990A-ACDA-40B6-AB71-134C073013B5
 description: |
     Detects events in which a history file gets deleted, e.g. the ~/bash_history to remove traces of malicious activity
