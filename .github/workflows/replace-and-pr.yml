@@ -13,7 +13,7 @@ jobs:
       - name: Checkout dev branch
         uses: actions/checkout@v3
         with:
-          ref: dev-stable
+          ref: dev
           fetch-depth: 0
 
       - name: Set up Git identity
