@@ -53,5 +53,5 @@ jobs:
           body: |
             This pull request updates Sigma rules by replacing legacy placeholders with ECS-compatible fields,
             based on the definitions in the `patterns.sed` file.
-          head: ${{ steps.vars.outputs.branch_name }}
+          branch: ${{ steps.vars.outputs.branch_name }}
           base: dev-stable
