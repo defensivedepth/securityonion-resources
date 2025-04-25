@@ -35,12 +35,13 @@ jobs:
           for file in $(find playbook/dev/sigma -type f -name '*.yaml'); do
             sed -i -f patterns.sed "$file"
           done
-
+          
       - name: Commit and push if changes found
         run: |
           if [[ -n "$(git status --porcelain)" ]]; then
             git add .
             git commit -m "Replace Sigma placeholders using ECS mappings"
+            git pull --rebase origin playbook-stable
             git push origin playbook-stable
           else
             echo "No changes to commit."
