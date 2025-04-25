@@ -15,6 +15,9 @@ jobs:
         with:
           ref: dev
           fetch-depth: 0
+          
+      - name: Fetch dev-stable
+        run: git fetch origin dev-stable:dev-stable
 
       - name: Set up Git identity
         run: |
