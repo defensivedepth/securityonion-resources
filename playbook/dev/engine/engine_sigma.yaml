@@ -11,7 +11,7 @@ contributors:
 created: 3/28/2025
 modified: 4/23/2024
 questions:
-  - question: 'Are there any other alerts associated with the internal system?'
+  - question: 'Are there any other alerts assocated with the internal system?'
     context: 'Identifying related alerts can help determine if the internal system is experiencing a broader issue.'
     answer_sources:
         - alert
