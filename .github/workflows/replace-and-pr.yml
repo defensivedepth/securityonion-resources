@@ -45,6 +45,13 @@ jobs:
             exit 0
           fi
 
+      - name: Show git status and diff
+        run: |
+          git status
+          git log --oneline --decorate --graph -n 5
+          git diff dev-stable..HEAD
+
+
       - name: Create Pull Request to dev-stable
         uses: peter-evans/create-pull-request@v5
         with:
