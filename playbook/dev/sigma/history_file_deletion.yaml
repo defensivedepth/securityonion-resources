@@ -11,7 +11,7 @@ contributors:
 date: 2025-04-21
 modified: 2025-04-21
 questions:
-  - question: 'What was the full command line that triggered the alert?'
+  - question: 'What was the full command line that triggred the alert?'
     context: 'The full command line provides critical context about which history file was deleted and how it was deleted.'
     range: ''
     answer_sources:
