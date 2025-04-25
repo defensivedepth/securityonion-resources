@@ -26,8 +26,9 @@ questions:
             condition: selection
         fields:
             - src_ip
+            - src_port
             - dst_ip
-            - hostname
+            - dst_port
   - question: 'Are there any other alerts associated with the internal system?'
     context: 'Identifying related alerts can help determine if the internal system is experiencing a broader issue.'
     answer_sources:
@@ -45,6 +46,23 @@ questions:
         fields:
             - rule.type
             - rule.name
+  - question: 'What process is associated with this specific network connection?'
+    context: 'Correlating process execution to the network connection can give further indication of intent.'
+    answer_sources:
+        - community_id
+    query: |
+        aggregation: false
+        logsource:
+          category: community_id
+        detection:
+            selection:
+                community_id|expand: '%community_id%'
+                event_dataset: 'endpoint.events.network'
+            condition: selection
+        fields:
+            - hostname
+            - Image
+            - CommandLine
   - question: 'What processes are associated with the public IP?'
     context: 'Correlating process execution to the network connection can give further indication of intent.'
     answer_sources:
@@ -53,13 +71,12 @@ questions:
     query: |
         aggregation: false
         logsource:
-          category: process_creation
+          category: network_connection
         detection:
             selection:
-                - src_ip|expand: '%public_ip%'
-                - dst_ip|expand: '%public_ip%'
+                related_ip|expand: '%public_ip%'
             condition: selection
         fields:
             - hostname
             - Image
-            - CmdLine
+            - CommandLine
