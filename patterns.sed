@@ -14,3 +14,4 @@ s|%public_ip%|{network.public.ip}|g
 s|%related.hosts%|{event_data.related.hosts}|g
 s|%related_ip%|{event_data.related.ip}|g
 s|%User%|{user.name}|g
+s/|expand:/:/g
