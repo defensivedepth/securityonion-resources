@@ -32,7 +32,7 @@ jobs:
 
       - name: Replace patterns using patterns.sed
         run: |
-          for file in $(find playbook/dev/sigma -type f -name '*.yaml'); do
+          for file in $(find playbook/dev -type f -name '*.yaml'); do
             sed -i -f patterns.sed "$file"
           done
           
