@@ -47,26 +47,3 @@ jobs:
             echo "No changes to commit."
             exit 0
           fi
-
-      - name: Show git status and diff
-        run: |
-          git status
-          git log --oneline --decorate --graph -n 5
-          git diff dev-stable..HEAD
-      
-      - name: Show diff with dev-stable
-        run: |
-          git fetch origin dev-stable:dev-stable
-          git log dev-stable..HEAD
-          git diff dev-stable..HEAD
-
-      - name: Create Pull Request to dev-stable
-        uses: peter-evans/create-pull-request@v5
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          title: "Replace Sigma placeholders with ECS fields"
-          body: |
-            This pull request updates Sigma rules by replacing legacy placeholders with ECS-compatible fields,
-            based on the definitions in the `patterns.sed` file.
-          branch: ${{ steps.vars.outputs.branch_name }}
-          base: dev-stable
