@@ -1,7 +1,7 @@
 name: Baseline Playbook - Sigma
 id: a56356b1-eba8-4e32-adc6-a8639d1ef781
 description: |
-    This is the baseline playbook for Sigma detections.
+    This is the baseline plybook for Sigma detections.
 type: detection
 detection_id: ''
 detection_category: ''
