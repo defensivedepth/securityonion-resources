@@ -21,14 +21,27 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@users.noreply.github.com"
 
-      - name: Create or checkout playbook-stable branch
+      - name: Create or checkout playbook-stable branch and fast-forward merge dev
         run: |
+          git fetch origin
+      
+          # Check if playbook-stable branch exists
           if git show-ref --verify --quiet refs/heads/playbook-stable; then
             git checkout playbook-stable
-            git merge dev
+            git pull origin playbook-stable
           else
             git checkout -b playbook-stable
           fi
+      
+          # Fast-forward only merge
+          git merge --ff-only origin/dev
+      
+          # Check if fast-forward was successful
+          if [ $? -ne 0 ]; then
+            echo "Fast-forward merge failed. Manual intervention needed."
+            exit 1
+          fi
+
 
       - name: Replace patterns using patterns.sed
         run: |
