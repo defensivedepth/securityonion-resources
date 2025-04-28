@@ -41,6 +41,7 @@ jobs:
 
       - name: Commit and push if there are changes
         run: |
+          rm -rf transformed/
           if [[ -n "$(git status --porcelain)" ]]; then
             git add playbook/dev/*.yaml
             git commit -m "Update transformed YAML files from dev"
